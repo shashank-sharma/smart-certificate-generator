@@ -5,6 +5,7 @@ import {Jumbotron} from 'react-bootstrap';
 import Landing from './components/landing';
 import axios from 'axios';
 import {configureAnchors} from 'react-scrollable-anchor';
+import ShopkeeperForm from './components/shopkeeperForm';
 
 export default class Page extends Component {
 
@@ -25,7 +26,7 @@ export default class Page extends Component {
     render() {
         return (
             <div>
-                <Landing/>
+                <ShopkeeperForm/>
             </div>
         )
     }

@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Success from './success'
 import axios from 'axios';
+import '../css/versionBeta.css'
 
 import panda_dark_base from '../img/panda_dark_base.png';
 import panda_dark_header from '../img/panda_dark_header.png';
@@ -17,6 +18,7 @@ import pumpkin_footer from '../img/pumpkin_footer.png';
 import buttercups_base from '../img/buttercups_base.png';
 import buttercups_header from '../img/buttercups_header.png';
 import buttercups_footer from '../img/buttercups_footer.png';
+//import { url } from "inspector";
 
 
 class ShopkeeperForm extends Component {
@@ -32,7 +34,7 @@ class ShopkeeperForm extends Component {
             'template_footer': null,
             'shop_name': '',
             'shop_content': null
-        },
+        }, // Remove final data and put image url or something
         isTemplateBase: true,
         isTemplateNav: false,
         isTemplateFooter: false,
@@ -50,7 +52,9 @@ class ShopkeeperForm extends Component {
         const finalData = this.state.finalData;
         finalData['template_' + temp] = e.target.name;
         this.setState({
-            "finalData": finalData
+            "finalData": finalData,
+            isTemplateFooter: true,
+            isTemplateNav: false // image url to be set in state
         })
     };
 
@@ -112,8 +116,17 @@ class ShopkeeperForm extends Component {
             });
     };
 
+    
+
+   
 
     render() {
+        const styles={
+            iconStyle: {
+                opacity: 1.0,
+            }
+        }
+        const { iconStyle } = styles;
         if (this.state.isSubmitted) {
             return (<Success/>);
         } else {
@@ -131,7 +144,17 @@ class ShopkeeperForm extends Component {
                     {/*<div style={{height: "50px"}}></div>*/}
                     <div className={"white picker-background"}>
                         {this.state.isTemplateBase ? (
-                        <div className={"picker-row"}>
+                        
+                        <div className="bg">
+                            {/**Clickable ( Upload image ) and select template here */}
+                            <h1 onClick={this.handleTemplateNav}>Select Template</h1>
+
+                        </div>
+                        ) : (<div></div>)}
+
+                        {this.state.isTemplateNav ? (
+                            
+                            <div className={"picker-row"}>
                             <img
                                 name="base_panda_dark"
                                 id={"base_panda_dark"}
@@ -192,138 +215,11 @@ class ShopkeeperForm extends Component {
                                     cursor: "pointer"
                                 }}
                             />
-                        </div>
-                        ) : (<div></div>)}
-
-                        {this.state.isTemplateNav ? (
-
-                            <div className={"picker-row"}>
-                                <img
-                                    name="nav_panda_dark"
-                                    id={"nav_panda_dark"}
-                                    className={"template_nav"}
-                                    src={panda_dark_header}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
-                                <img
-                                    name="nav_panda_light"
-                                    id={"nav_panda_light"}
-                                    className={"template_nav"}
-                                    src={panda_light_header}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
-                                <img
-                                    name="nav_pumpkin"
-                                    id={"nav_pumpkin"}
-                                    className={"template_nav"}
-                                    src={pumpkin_header}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
-                                <img
-                                    name="nav_buttercups"
-                                    id={"nav_buttercups"}
-                                    className={"template_nav"}
-                                    src={buttercups_header}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
-                            </div>
-
-                        ) : (<div></div>)}
+                        </div> ): (<div></div>)}
                         {this.state.isTemplateFooter ? (
-
-                            <div className={"picker-row"}>
-                                <img
-                                    name="footer_panda_dark"
-                                    id={"footer_panda_dark"}
-                                    className={"template_footer"}
-                                    src={panda_dark_footer}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
-                                <img
-                                    name="footer_panda_light"
-                                    id={"footer_panda_light"}
-                                    className={"template_footer"}
-                                    src={panda_light_footer}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
-                                <img
-                                    name="footer_pumpkin"
-                                    id={"footer_pumpkin"}
-                                    className={"template_footer"}
-                                    src={pumpkin_footer}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
-                                <img
-                                    name="footer_buttercups"
-                                    id={"footer_buttercups"}
-                                    className={"template_footer"}
-                                    src={buttercups_footer}
-                                    alt="dark_theme"
-                                    onClick={this.handleImageChange}
-                                    style={{
-                                        width: "auto",
-                                        height: "60vh",
-                                        marginBottom: "25vh",
-                                        marginLeft: "100px",
-                                        cursor: "pointer"
-                                    }}
-                                />
+                           
+                            <div>
+                                
                             </div>
 
                         ) : (<div></div>)}
@@ -355,32 +251,31 @@ class ShopkeeperForm extends Component {
                             </div>
                         ) : (<div></div>)}
                     </div>
+                    
                     <div className={"white picker-menu"}>
                         <div className={"row center"}>
-                            <div className={"col l2"}>
-                                <i className="large material-icons medium picker-icon" onClick={this.handleTemplateBase}>texture</i>
+                            <div className={"col l3"}>
+                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateBase?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateBase}>texture</i>
                             </div>
-                            <div className={"col l2"}>
-                                <i className="large material-icons medium picker-icon" onClick={this.handleTemplateNav}>web</i>
+                            <div className={"col l3"}>
+                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateNav?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateNav}>web</i>
                             </div>
-                            <div className={"col l2"}>
-                                <i className="large material-icons medium picker-icon" onClick={this.handleTemplateFooter}>video_label</i>
+                            <div className={"col l3"}>
+                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateFooter?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateFooter}>video_label</i>
                             </div>
-                            <div className={"col l2"}>
-                                <i className="large material-icons medium picker-icon" onClick={this.handleTemplateInput}>toc</i>
+                            <div className={"col l3"}>
+                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateInput?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateInput}>toc</i>
                             </div>
-                            <div className={"col l2"}>
-                                <i className="large material-icons medium picker-icon">view_carousel</i>
-                            </div>
-                            <div className={"col l2"}>
-                                <i className="large material-icons medium picker-icon">filter</i>
-                            </div>
+                            
                         </div>
                     </div>
                 </React.Fragment>
-            );
+            );  
         }
+        
     }
 }
+
+
 
 export default ShopkeeperForm;

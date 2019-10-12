@@ -1,0 +1,8 @@
+.bg{
+    background-image: linear-gradient(45deg, #FBDBF9, white, #FBDBF9);
+    height: 100%;
+    width: 100%;
+}
+.bg2{
+    background-image: linear-gradient(45deg, purple, black);
+}
