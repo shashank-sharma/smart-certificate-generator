@@ -1,0 +1,62 @@
+                   <div className={""}>
+                        <div className="card row">
+                            <div className="col s12 m12 l12">
+                                <br/>
+                                <br/>
+                                <form onSubmit={this.submitForm} style={{margin: '30px'}}>
+                                    <input
+                                        name="shop_name"
+                                        placeholder="Name of the shop"
+                                        value={this.state.shop_name}
+                                        onChange={this.handleChange}
+                                    />
+                                    <input
+                                        name="shop_type"
+                                        placeholder="Type of the shop"
+                                        value={this.state.shop_type}
+                                        onChange={this.handleChange}
+                                    />
+
+                                    <h4 style={{fontSize: "18px", textAlign: "center"}}>
+                                        Select theme
+                                    </h4>
+                                    <br/>
+                                    <div className="row">
+                                        <div className="col s12 m6 l6">
+                                            <div>
+                                                <img
+                                                    name="dark"
+                                                    className={btn_dark}
+                                                    src="https://i.pinimg.com/originals/ac/e0/7c/ace07c6c338c91b621d1d736ca8c40ec.jpg"
+                                                    alt="dark_theme"
+                                                    onClick={this.handleImageChange}
+                                                    style={{width: "100%", height: "100%"}}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col s12 m6 l6">
+                                            <div style={{height: "100%"}}>
+                                                <img
+                                                    name="light"
+                                                    className={btn_light}
+                                                    src="https://i.pinimg.com/originals/ac/e0/7c/ace07c6c338c91b621d1d736ca8c40ec.jpg"
+                                                    alt="dark_theme"
+                                                    onClick={this.handleImageChange}
+                                                    style={{width: "100%", height: "100%"}}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div style={{textAlign: "center"}}>
+                                    <button
+                                        className="btn btn-large green darken-3"
+                                        style={{marginBottom: "30px"}}
+                                        onClick={this.handleSubmit}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>

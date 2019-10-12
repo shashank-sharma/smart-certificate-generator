@@ -1,0 +1,6 @@
+/venv
+/__pycache__
+myvenv
+.idea
+.env
+.vscode

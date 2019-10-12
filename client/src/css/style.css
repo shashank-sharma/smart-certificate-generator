@@ -1,0 +1,86 @@
+html{
+    background-image: linear-gradient(45deg, #F38122, #F76B58);
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+h1{
+    font-family: 'Lobster';
+    text-align: center;
+    padding-top: 300px;
+    font-size: 56px;
+    animation-name: fadeIn;
+    animation-duration: 3s;
+    
+}
+.customButton{
+    animation-name: fadeIn;
+    animation-duration: 4s;
+    font-family: 'Pacifico';
+    background-image: linear-gradient(to right,#F69A4D,#F69A4D,#F07B67);
+}
+h3{
+    font-family: 'Pacifico';
+    text-align: center;
+    font-size: 56px;
+    animation-name: fadeIn;
+    animation-duration: 3s;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.select-border {
+    border: solid teal 10px;
+}
+
+.picker {
+    overflow-x: scroll;
+}
+
+.picker-column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+}
+
+.picker-row {
+    overflow-x:scroll;
+    white-space:nowrap;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.picker-background {
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.picker-menu {
+    position: fixed;
+    width: 100%;
+    height: 100px;
+    bottom: 0;
+}
+
+.picker-icon {
+    cursor: pointer;
+}
+
+.large-input {
+    border-bottom: 1.5px solid black !important;
+    -webkit-box-shadow: 0 1px 0 0 #26a69a;
+    box-shadow: 0 1px 0 0 black;
+    height: 7rem !important;
+    font-size: 32px !important;
+}
