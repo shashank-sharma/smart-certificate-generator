@@ -1,8 +1,40 @@
 .bg{
-    background-image: linear-gradient(45deg, #FBDBF9, white, #FBDBF9);
+    background-image: linear-gradient(45deg, #FED3F8  , white, #FED3F8);
     height: 100%;
     width: 100%;
 }
 .bg2{
     background-image: linear-gradient(45deg, purple, black);
+}
+.formatHr{
+    transform: rotate(90deg);
+}
+.textFormat{
+    font-family: 'Quicksand', sans-serif;
+    display: inline-block;
+  	overflow: hidden;
+  	letter-spacing: 2px;
+ 	animation: typing 5s steps(30, end), blink .75s step-end infinite;
+    white-space: nowrap;
+    font-size: 30px;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+
+@keyframes typing {
+    from { 
+        width: 0% 
+    }
+    to { 
+        width: 100% 
+    }
+}
+
+@keyframes blink {
+    from, to { 
+        border-color: transparent 
+    }
+    50% { 
+        border-color: orange; 
+    }
 }
