@@ -27,6 +27,10 @@ NLTK
 
 <img src="https://i.stack.imgur.com/FjZmd.png" />
 
+### Creating Template
+
+<img src=""
+
 ### Replacing
 
 <img src="https://i.stack.imgur.com/K53mD.png" />
@@ -34,3 +38,7 @@ NLTK
 ### Webapp scanning and creating template
 
 <img src="https://i.stack.imgur.com/gkCT5.png" />
+
+### API Figuring out
+
+<img src="https://i.stack.imgur.com/oYR2l.png" />
