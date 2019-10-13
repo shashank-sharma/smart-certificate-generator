@@ -41,6 +41,14 @@ class ShopkeeperForm extends Component {
         isTemplateInput: false,
     };
 
+    componentDidMount(){
+        fetch('http://3880832e.ngrok.io/ping ')
+            .then(res=>res.json())
+            .then(data=>{
+                console.log(data)
+            })
+    }
+
     handleImageChange = e => {
         const temp = e.target.name.split('_')[0];
         const allData = document.getElementsByClassName('template_' + temp);
@@ -53,8 +61,7 @@ class ShopkeeperForm extends Component {
         finalData['template_' + temp] = e.target.name;
         this.setState({
             "finalData": finalData,
-            isTemplateFooter: true,
-            isTemplateNav: false // image url to be set in state
+             // image url to be set in state
         })
     };
 
@@ -116,6 +123,23 @@ class ShopkeeperForm extends Component {
             });
     };
 
+    handleFileChange = e =>{
+        const file = e.target.files[0]
+        let formData = new FormData()
+        formData.append('file', file)
+        //console.log(file)
+        axios.post('http://48470129.ngrok.io/create_template', formData, {
+            headers: {
+                'Content-Type':'multipart/form-data'
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
     
 
    
@@ -140,136 +164,176 @@ class ShopkeeperForm extends Component {
                 btn_light = "border-image";
             }
             return (
-                <React.Fragment>
-                    {/*<div style={{height: "50px"}}></div>*/}
-                    <div className={"white picker-background"}>
-                        {this.state.isTemplateBase ? (
-                        
-                        <div className="bg">
-                            {/**Clickable ( Upload image ) and select template here */}
-                            <h1 onClick={this.handleTemplateNav}>Select Template</h1>
-
-                        </div>
-                        ) : (<div></div>)}
-
-                        {this.state.isTemplateNav ? (
-                            
-                            <div className={"picker-row"}>
-                            <img
-                                name="base_panda_dark"
-                                id={"base_panda_dark"}
-                                className={"template_base"}
-                                src={panda_dark_base}
-                                alt="dark_theme"
-                                onClick={this.handleImageChange}
-                                style={{
-                                    width: "auto",
-                                    height: "60vh",
-                                    marginBottom: "25vh",
-                                    marginLeft: "100px",
-                                    cursor: "pointer"
-                                }}
-                            />
-                            <img
-                                name="base_panda_light"
-                                id={"base_light"}
-                                className={"template_base"}
-                                src={panda_light_base}
-                                alt="dark_theme"
-                                onClick={this.handleImageChange}
-                                style={{
-                                    width: "auto",
-                                    height: "60vh",
-                                    marginBottom: "25vh",
-                                    marginLeft: "100px",
-                                    cursor: "pointer"
-                                }}
-                            />
-                            <img
-                                name="base_pumpkin"
-                                id={"base_pumpkin"}
-                                className={"template_base"}
-                                src={pumpkin_base}
-                                alt="dark_theme"
-                                onClick={this.handleImageChange}
-                                style={{
-                                    width: "auto",
-                                    height: "60vh",
-                                    marginBottom: "25vh",
-                                    marginLeft: "100px",
-                                    cursor: "pointer"
-                                }}
-                            />
-                            <img
-                                name="base_buttercups"
-                                id={"base_buttercups"}
-                                className={"template_base"}
-                                src={buttercups_base}
-                                alt="dark_theme"
-                                onClick={this.handleImageChange}
-                                style={{
-                                    width: "auto",
-                                    height: "60vh",
-                                    marginBottom: "25vh",
-                                    marginLeft: "100px",
-                                    cursor: "pointer"
-                                }}
-                            />
-                        </div> ): (<div></div>)}
-                        {this.state.isTemplateFooter ? (
-                           
-                            <div>
-                                
-                            </div>
-
-                        ) : (<div></div>)}
-                        {this.state.isTemplateInput ? (
-                            <div className={"container"} style={{marginTop: "50px"}}>
-                                <input
-                                    name="shop_name"
-                                    className={"large-input"}
-                                    placeholder="Shop Name"
-                                    value={this.state.finalData.shop_name}
-                                    onChange={this.handleChange}
-                                />
-
-                                <textarea
-                                    name="shop_content"
-                                    className={"large-input"}
-                                    placeholder="Shop Content"
-                                    value={this.state.finalData.shop_content}
-                                    onChange={this.handleChange}
-                                />
-
-                                <button
-                                    className="btn btn-large green darken-3"
-                                    style={{marginBottom: "30px"}}
-                                    onClick={this.handleSubmit}
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        ) : (<div></div>)}
+              <React.Fragment>
+                {/*<div style={{height: "50px"}}></div>*/}
+                <div className={"white picker-background"}>
+                  {this.state.isTemplateBase ? (
+                    <div className="bg">
+                      {/**Clickable ( Upload image ) and select template here */}
+                      
+                        <input style={{marginLeft:'600px'}} type="file" onChange={this.handleFileChange} />
+                      
+                      <h1 onClick={this.handleTemplateNav}>Select Template</h1>
                     </div>
-                    
-                    <div className={"white picker-menu"}>
-                        <div className={"row center"}>
-                            <div className={"col l3"}>
-                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateBase?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateBase}>texture</i>
-                            </div>
-                            <div className={"col l3"}>
-                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateNav?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateNav}>web</i>
-                            </div>
-                            <div className={"col l3"}>
-                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateFooter?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateFooter}>video_label</i>
-                            </div>
-                            <div className={"col l3"}>
-                                <i className="large material-icons medium picker-icon" style={this.state.isTemplateInput?iconStyle:{opacity:'0.3'}} onClick={this.handleTemplateInput}>toc</i>
-                            </div>
-                            
-                        </div>
+                  ) : (
+                    <div></div>
+                  )}
+
+                  {this.state.isTemplateNav ? (
+                    <div className={"picker-row"}>
+                      <img
+                        name="base_panda_dark"
+                        id={"base_panda_dark"}
+                        className={"template_base"}
+                        src={panda_dark_base}
+                        alt="dark_theme"
+                        onClick={this.handleImageChange}
+                        style={{
+                          width: "auto",
+                          height: "60vh",
+                          marginBottom: "25vh",
+                          marginLeft: "100px",
+                          cursor: "pointer"
+                        }}
+                      />
+                      <img
+                        name="base_panda_light"
+                        id={"base_light"}
+                        className={"template_base"}
+                        src={panda_light_base}
+                        alt="dark_theme"
+                        onClick={this.handleImageChange}
+                        style={{
+                          width: "auto",
+                          height: "60vh",
+                          marginBottom: "25vh",
+                          marginLeft: "100px",
+                          cursor: "pointer"
+                        }}
+                      />
+                      <img
+                        name="base_pumpkin"
+                        id={"base_pumpkin"}
+                        className={"template_base"}
+                        src={pumpkin_base}
+                        alt="dark_theme"
+                        onClick={this.handleImageChange}
+                        style={{
+                          width: "auto",
+                          height: "60vh",
+                          marginBottom: "25vh",
+                          marginLeft: "100px",
+                          cursor: "pointer"
+                        }}
+                      />
+                      <img
+                        name="base_buttercups"
+                        id={"base_buttercups"}
+                        className={"template_base"}
+                        src={buttercups_base}
+                        alt="dark_theme"
+                        onClick={this.handleImageChange}
+                        style={{
+                          width: "auto",
+                          height: "60vh",
+                          marginBottom: "25vh",
+                          marginLeft: "100px",
+                          cursor: "pointer"
+                        }}
+                      />
                     </div>
-                </React.Fragment>
+                  ) : (
+                    <div></div>
+                  )}
+                  {this.state.isTemplateFooter ? <div></div> : <div></div>}
+                  {this.state.isTemplateInput ? (
+                    <div className={"container"} style={{ marginTop: "50px" }}>
+                      <input
+                        name="shop_name"
+                        className={"large-input"}
+                        placeholder="Shop Name"
+                        value={this.state.finalData.shop_name}
+                        onChange={this.handleChange}
+                      />
+
+                      <textarea
+                        name="shop_content"
+                        className={"large-input"}
+                        placeholder="Shop Content"
+                        value={this.state.finalData.shop_content}
+                        onChange={this.handleChange}
+                      />
+
+                      <button
+                        className="btn btn-large green darken-3"
+                        style={{ marginBottom: "30px" }}
+                        onClick={this.handleSubmit}
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
+
+                <div className={"white picker-menu"}>
+                  <div className={"row center"}>
+                    <div className={"col l3"}>
+                      <i
+                        className="large material-icons medium picker-icon"
+                        style={
+                          this.state.isTemplateBase
+                            ? iconStyle
+                            : { opacity: "0.3" }
+                        }
+                        onClick={this.handleTemplateBase}
+                      >
+                        texture
+                      </i>
+                    </div>
+                    <div className={"col l3"}>
+                      <i
+                        className="large material-icons medium picker-icon"
+                        style={
+                          this.state.isTemplateNav
+                            ? iconStyle
+                            : { opacity: "0.3" }
+                        }
+                        onClick={this.handleTemplateNav}
+                      >
+                        web
+                      </i>
+                    </div>
+                    <div className={"col l3"}>
+                      <i
+                        className="large material-icons medium picker-icon"
+                        style={
+                          this.state.isTemplateFooter
+                            ? iconStyle
+                            : { opacity: "0.3" }
+                        }
+                        onClick={this.handleTemplateFooter}
+                      >
+                        video_label
+                      </i>
+                    </div>
+                    <div className={"col l3"}>
+                      <i
+                        className="large material-icons medium picker-icon"
+                        style={
+                          this.state.isTemplateInput
+                            ? iconStyle
+                            : { opacity: "0.3" }
+                        }
+                        onClick={this.handleTemplateInput}
+                      >
+                        toc
+                      </i>
+                    </div>
+                  </div>
+                </div>
+              </React.Fragment>
             );  
         }
         
