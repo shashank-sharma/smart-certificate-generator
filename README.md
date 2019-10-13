@@ -1,7 +1,5 @@
 # Introduction
-The Smart Certificate Generator provides functionality of generating certificates digitally.
-It generates certificates instantly without any hesitation using several technologies.
-
+Certificates may seem a trivial matter but the automated generation of digital certificates is a blessing in disguise for event managers and developers alike. Inker is a smart certificate generator which provides its customers the ability to generate custom certificates based on the data the user provides. The user can either choose to upload his or her own template or choose from the ones we are offering. Once done, the user is required to input the data that he wants to include in the certificate, for example, some parameters may be Name, Organization and Date. When the user submits these data, the inker module which is integrated in our web app will 
 # Usage
 You Can either select any template from given options or simply could upload your own template and it will print the certificate accordingly.
 
