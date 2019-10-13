@@ -1,0 +1,240 @@
+# import os
+# import tempfile
+# from pdf2image import convert_from_path
+
+# filename = 'target.pdf'
+
+# with tempfile.TemporaryDirectory() as path:
+#      images_from_path = convert_from_path(filename, output_folder=path, last_page=1, first_page =0)
+
+# base_filename  =  os.path.splitext(os.path.basename(filename))[0] + '.jpg'
+
+# save_dir = 'your_saved_dir'
+
+# for page in images_from_path:
+#     page.save(os.path.join(save_dir, base_filename), 'JPEG')
+
+
+# import cv2
+# import pytesseract
+
+# words_to_remove = ['google']
+# image = cv2.imread("certificate-3-new.jpg")
+# image = cv2.resize(image,(600,300))
+# gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU)[1]
+# # Create custom kernel
+# kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3,3))
+# # Perform closing (dilation followed by erosion)
+# close = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+# # mask = cv2.imread('certificate-3.jpg', 0)
+# dst_TELEA = cv2.inpaint(image,close, 100,cv2.INPAINT_TELEA)
+# # dst_NS = cv2.inpaint(image,thresh,3,cv2.INPAINT_NS)
+# # mask = cv2.threshold(gray, 100, 255, cv2.THRESH_TRUNC)[1]
+# # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5,5))
+# # inverted_thresh = 255 - thresh
+# # dilate = cv2.dilate(inverted_thresh, kernel, iterations=4)
+
+# # cnts = cv2.findContours(dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# # cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+# # for c in cnts:
+# #     x,y,w,h = cv2.boundingRect(c)
+# #     ROI = thresh[y:y+h, x:x+w]
+# #     data = pytesseract.image_to_string(ROI, lang='eng',config='--psm 6').lower()
+# #     print(data)
+# #     #if data in words_to_remove:
+# #     image[y:y+h, x:x+w] = [255,255,255]
+# imS = cv2.resize(thresh, (960, 540))
+# imS2 = cv2.resize(close, (960, 540))
+# imS3 = cv2.resize(dst_TELEA, (960, 540))
+# # imS2 = cv2.resize(dilate, (960, 540))
+# # imS3 = cv2.resize(image, (960, 540))
+# cv2.imshow("thresh", thresh)
+# cv2.imshow("TELEA", close)
+# cv2.imshow("NS", dst_TELEA)
+# # cv2.imshow("dilate", imS2)
+# # cv2.imshow("image", imS3)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# STEP 3 ===========================================================================
+
+import nltk
+from nameparser.parser import HumanName
+
+
+def get_human_names(text):
+    tokens = nltk.tokenize.word_tokenize(text)
+    pos = nltk.pos_tag(tokens)
+    sentt = nltk.ne_chunk(pos, binary=False)
+    person_list = []
+    person = []
+    name = ""
+    for subtree in sentt.subtrees(filter=lambda t: t.label() == 'PERSON'):
+        for leaf in subtree.leaves():
+            person.append(leaf[0])
+        if len(person) > 1:  # avoid grabbing lone surnames
+            for part in person:
+                name += part + ' '
+            if name[:-1] not in person_list:
+                person_list.append(name[:-1])
+            name = ''
+        person = []
+
+    return (person_list)
+
+
+def inverte(imagem):
+    imagem = (255 - imagem)
+    return imagem
+
+
+import pytesseract
+from pytesseract import Output
+import cv2
+
+img = cv2.imread('certificate-3.jpg')
+
+img_height, img_width, img_channel = img.shape
+
+d = pytesseract.image_to_data(img, output_type=Output.DICT)
+n_boxes = len(d['level'])
+sentence = ' '.join([d['text'][i] for i in range(n_boxes)])
+try:
+    first_name, last_name = get_human_names(sentence)[0].split(' ')
+except:
+    first_name = None
+    last_name = None
+
+for i in range(n_boxes):
+    if d['text'][i] == first_name:
+        d['text'][i] = 'MahaMahaPappu'
+    elif d['text'][i] == last_name:
+        d['text'][i] = 'MahaMahaPatla'
+
+temp_data = {}
+temp_x = 0
+temp_y = 0
+temp_h = 0
+temp_sentence = ''
+font_color_flag = 0
+font_heavy_flag = 0
+for i in range(n_boxes):
+    if d['text'][i] != '' and len(d['text'][i]) != 1:
+        print(font_color_flag)
+        (x, y, w, h) = (d['left'][i], d['top'][i], d['width'][i], d['height'][i])
+        # aaa = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        crop_img = img[y:y + h, x:x + w]
+        crop_img_2 = img[y - 10: (y - 10) + h, x - 10:(x - 10) + w]
+        b, g, r = crop_img_2[0, 0]
+        gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
+        text_color = (255, 255, 255)
+        if b > 240 or g > 240 or r > 240:
+            print(d['text'][i])
+            gray = inverte(gray)
+            font_color_flag = 1
+        print(x, y, w, h, d['text'][i], b, g, r)
+        thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU)[1]
+        # thresh = cv2.threshold(gray, 12, 255,cv2.THRESH_BINARY)[1]
+        # dst = cv2.inpaint(crop_img, thresh, 50, cv2.INPAINT_TELEA)
+        if y not in temp_data:
+            for j in range(y - 7, y + 7):
+                if j in temp_data:
+                    temp_data[j] += w
+                    break
+            temp_data[y] = 0
+        temp_data[y] += w
+        cv2.rectangle(img, (x, y), (x + w, y + h), (int(b), int(g), int(r)), -1)
+        # img[y:y+h, x:x+w] = dst
+        # print(x, y, w, h, d['text'][i])
+        # ft = cv2.freetype.createFreeType2()
+        # ft.loadFontData(fontFileName='OpenSans-Regular.ttf', id=0)
+        # cv2.putText(img, d['text'][i], (x, y+h-15), fontHeight=(h * 0.04), color=text_color, thickness=7, line_type=cv2.LINE_AA, bottomLeftOrigin=True)
+        # FONT_HERSHEY_SCRIPT_COMPLEX
+        heavy = int(img_width * img_height * 0.000001)
+        if y - 7 <= temp_y <= y + 7:
+            temp_sentence += d['text'][i] + ' '
+        else:
+            if temp_y == 0:
+                temp_x = x
+                temp_y = y
+                temp_h = h
+                temp_sentence += d['text'][i] + ' '
+            else:
+                if font_color_flag == 1:
+                    text_color = (0, 0, 0)
+                if font_heavy_flag == 1:
+                    heavy = 8
+                textsize = cv2.getTextSize(temp_sentence, cv2.FONT_HERSHEY_DUPLEX, (temp_h * 0.03), heavy)[0]
+                factor = (temp_data[temp_y] - textsize[0]) // 2
+                if factor > 0:
+                    temp_x += factor
+                elif textsize[0] > temp_data[temp_y] + 300:
+                    temp_x = int(temp_x - (textsize[0] - temp_data[temp_y]) // 2.2)
+                cv2.putText(img, temp_sentence, (temp_x, temp_y + 20), cv2.FONT_HERSHEY_DUPLEX, (temp_h * 0.03),
+                            text_color, heavy)
+                temp_x = x
+                temp_y = y
+                temp_h = h
+                temp_sentence = d['text'][i] + ' '
+                font_color_flag = 0
+                font_heavy_flag = 0
+            if h > 90:
+                font_heavy_flag = 1
+if temp_y != 0 and temp_sentence != '':
+    if font_color_flag == 1:
+        text_color = (0, 0, 0)
+    if font_heavy_flag == 1:
+        heavy = 8
+    cv2.putText(img, temp_sentence, (temp_x, temp_y - 15), cv2.FONT_HERSHEY_DUPLEX, (temp_h * 0.03), text_color, heavy)
+# if y in temp_data:
+# 	first_h = temp_data[y][0][3]
+# 	# print('found', d['text'][i])
+# 	if first_h == h:
+# 		cv2.putText(img, d['text'][i], (x, y+h-15), cv2.FONT_HERSHEY_DUPLEX, (h * 0.03), text_color, heavy)
+# 	elif first_h > h:
+# 		cv2.putText(img, d['text'][i], (x, y+h-10), cv2.FONT_HERSHEY_DUPLEX, (h * 0.03), text_color, heavy)
+# 	else:
+# 		cv2.putText(img, d['text'][i], (x, y+h-int((h-first_h)//1.5)), cv2.FONT_HERSHEY_DUPLEX, (h * 0.03), text_color, heavy)
+# else:
+# 	temp_data[y] = []
+# 	cv2.putText(img, d['text'][i], (x, y+h-15), cv2.FONT_HERSHEY_DUPLEX, (h * 0.03), text_color, heavy)
+# temp_data[y].append([x, y, w, h])
+
+result = cv2.resize(img, (960, 540))
+# result2 = cv2.resize(thresh, (960, 540))
+cv2.imshow('img', result)
+# cv2.imshow('img2', result2)
+# cv2.imshow('crop', crop_img)
+# cv2.imshow('ww', img)
+cv2.waitKey(0)
+
+# ONE MORE ==============================================================
+
+# import cv2
+
+# image = cv2.imread('b.jpg')
+# gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+
+# close_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15,3))
+# cv2.imshow('kernel', close_kernel)
+# close = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, close_kernel, iterations=1)
+
+# dilate_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5,3))
+# dilate = cv2.dilate(close, dilate_kernel, iterations=1)
+
+# cnts = cv2.findContours(dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+# for c in cnts:
+#     area = cv2.contourArea(c)
+#     if area > 200 and area < 15000:
+#         x,y,w,h = cv2.boundingRect(c)
+#         cv2.rectangle(image, (x, y), (x + w, y + h), (222,228,251), -1)
+
+# result = cv2.resize(image, (960, 540))
+# result2 = cv2.resize(dilate, (960, 540))
+
+# cv2.imshow('image', result)
+# cv2.imshow('imag2', result2)
+# cv2.waitKey(0)

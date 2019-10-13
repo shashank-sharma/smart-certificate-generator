@@ -26,7 +26,7 @@ import M from "materialize-css";
 //import {Container,Row,Col} from 'reactstrap';
 import "../css/xray.css";
 
-const url = "http://www.africau.edu/images/default/sample.pdf"
+const url = "http://127.0.0.1:5000/certificate/CID12513985368024";
 
 class ShopkeeperForm extends Component {
   state = {
@@ -48,6 +48,7 @@ class ShopkeeperForm extends Component {
     loading: false,
     numPages: null,
     pageNumber: 1,
+      mainUrl: 'http://127.0.0.1:5000/certificate/CID12513985368024'
   };
 
   componentDidMount() {
@@ -120,17 +121,7 @@ class ShopkeeperForm extends Component {
   };
 
   handleSubmit = () => {
-    axios
-      .post("/start", {
-        token: localStorage.getItem("token"),
-        data: this.state.finalData
-      })
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+
   };
 
   handleFileChange = e => {
@@ -166,6 +157,41 @@ class ShopkeeperForm extends Component {
   };
 
   handleDataSubmit = () => {
+      axios
+          .post("http://127.0.0.1:5000/create_template", this.state.formData, {
+              headers: {
+                  "Content-Type": "multipart/form-data"
+              }
+          })
+          .then((response) => {
+              console.log(response);
+              this.setState({
+                  'tid': response.data.data.id
+              });
+              setTimeout(() => {
+                  M.toast({ html: "Template ID: " + response.data.data.id });
+              }, 1000)
+
+
+              axios
+                  .post("http://127.0.0.1:5000/" + this.state.tid +"/generate_certificate",
+                      {'name': this.state.finalData.name, 'company': this.state.finalData.event_name}, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then((response) => {
+                      console.log(response);
+                      this.state.mainUrl = 'http://127.0.0.1:5000/certificate/' + response.data.data.id;
+                  })
+                  .catch(function(error) {
+                      console.log(error);
+                  });
+
+          })
+          .catch(function(error) {
+              console.log(error);
+          });
     this.setState({
       isTemplateInput: true,
       isTemplateFooter: false,
@@ -380,13 +406,10 @@ class ShopkeeperForm extends Component {
               )}
               {this.state.isTemplateInput ? (
                 <div className={"row"} style={{ marginTop: "50px" }}>
-                  <div className={"col s12 m6 l6"}>
-                    {/**Button to download */}
-                  </div>
-                  <div className={"col s12 m6 l6"}>
+                  <div className={"col s12 m12 l12"}>
                     {/**PDF view here */}
                     <Document
-                        file={url}
+                        file={this.state.mainUrl}
                         onLoadSuccess={this.onDocumentLoadSuccess}
                     >
                         <Page pageNumber={1}/>
@@ -398,7 +421,7 @@ class ShopkeeperForm extends Component {
                     <i
                       className="material-icons large"
                       id={"menu"}
-                      onClick={this.handleSubmit}
+                      onClick={() => {window.location=this.state.mainUrl}}
                     >
                       public
                     </i>
