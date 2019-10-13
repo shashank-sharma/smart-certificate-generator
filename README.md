@@ -16,10 +16,10 @@ The system is compatible with any format of template whether it could be pdf or 
 The system comprises of opencv library with pytesseract module to analyze the template for text analysis and identification.it creates a rectangular box along every word to uniquely identify it which eases the removal and addition of user defined text over the certificate.
 
 # TechnicalStack
--Python
--Flask
--OpenCv
--Pytesseract
--Spacy
--NLTK
+Python
+Flask
+OpenCv
+Pytesseract
+Spacy
+NLTK
 
