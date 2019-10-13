@@ -20,6 +20,10 @@ import buttercups_header from '../img/buttercups_header.png';
 import buttercups_footer from '../img/buttercups_footer.png';
 //import { url } from "inspector";
 
+import M from 'materialize-css';
+import {Container,Row,Col} from 'reactstrap';
+import '../css/xray.css'
+
 
 class ShopkeeperForm extends Component {
     state = {
@@ -29,16 +33,15 @@ class ShopkeeperForm extends Component {
         theme: "light",
         isSubmitted: false,
         finalData: {
-            'template_base': null,
-            'template_nav': null,
-            'template_footer': null,
-            'shop_name': '',
-            'shop_content': null
+            'event_name': '',
+            'name': ''
         }, // Remove final data and put image url or something
         isTemplateBase: true,
         isTemplateNav: false,
         isTemplateFooter: false,
         isTemplateInput: false,
+        formData: null,
+        file: null
     };
 
     componentDidMount(){
@@ -102,6 +105,8 @@ class ShopkeeperForm extends Component {
     };
 
     handleTemplateInput = e => {
+        var elems = document.querySelectorAll('.tap-target');
+        var instances = M.TapTarget.init(elems, {});
         this.setState({
             'isTemplateInput': true,
             'isTemplateFooter': false,
@@ -124,11 +129,24 @@ class ShopkeeperForm extends Component {
     };
 
     handleFileChange = e =>{
-        const file = e.target.files[0]
-        let formData = new FormData()
-        formData.append('file', file)
+        const file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+        this.setState({
+            'formData': formData
+        });
+        this.setState({
+            file: URL.createObjectURL(file)
+        });
+        M.toast({html: 'Template Selected'});
+        setTimeout(() => {
+            this.handleTemplateFooter();
+        }, 1000);
         //console.log(file)
-        axios.post('http://48470129.ngrok.io/create_template', formData, {
+    };
+
+    uploadFile(formData) {
+        axios.post('http://127.0.0.1:5000/create_test_template', formData, {
             headers: {
                 'Content-Type':'multipart/form-data'
             }
@@ -170,8 +188,14 @@ class ShopkeeperForm extends Component {
                   {this.state.isTemplateBase ? (
                     <div className="bg">
                       {/**Clickable ( Upload image ) and select template here */}
+
+                        {/*<div className="">*/}
+                            {/*<span>File</span>*/}
+                            {/*<i className="large material-icons medium picker-icon black-text"> </i>*/}
+                            {/*<input type="file" />*/}
+                        {/*</div>*/}
                       
-                        <input style={{marginLeft:'600px'}} type="file" onChange={this.handleFileChange} />
+                        <input type="file" onChange={this.handleFileChange} />
                       
                       <h1 onClick={this.handleTemplateNav}>Select Template</h1>
                     </div>
@@ -245,32 +269,43 @@ class ShopkeeperForm extends Component {
                   ) : (
                     <div></div>
                   )}
-                  {this.state.isTemplateFooter ? <div></div> : <div></div>}
-                  {this.state.isTemplateInput ? (
-                    <div className={"container"} style={{ marginTop: "50px" }}>
+                  {this.state.isTemplateFooter ? <div>
                       <input
-                        name="shop_name"
-                        className={"large-input"}
-                        placeholder="Shop Name"
-                        value={this.state.finalData.shop_name}
-                        onChange={this.handleChange}
+                          name="event_name"
+                          className={"large-input"}
+                          placeholder="Event Name"
+                          value={this.state.finalData.event_name}
+                          onChange={this.handleChange}
                       />
-
-                      <textarea
-                        name="shop_content"
-                        className={"large-input"}
-                        placeholder="Shop Content"
-                        value={this.state.finalData.shop_content}
-                        onChange={this.handleChange}
+                      <input
+                          name="name"
+                          className={"large-input"}
+                          placeholder="Name"
+                          value={this.state.finalData.name}
+                          onChange={this.handleChange}
                       />
+                  </div> : <div></div>}
+                  {this.state.isTemplateInput ? (
+                    <div className={"row"} style={{ marginTop: "50px" }}>
+                      <div className={"col s12 m6 l6"}>
+                      </div>
+                        <div className={"col s12 m6 l6"}>
+                                    <div className="outclass">
+                                        <div className="scene">
+                                            <div className="scene__slide scene__slide_first"><img className={"xray-image"} src={this.state.file}></img></div>
+                                            <div className="scene__slide scene__slide_second"><img className="xray-image invertimage" src={this.state.file}></img></div>
+                                        </div>
+                                    </div>
+                        </div>
 
-                      <button
-                        className="btn btn-large green darken-3"
-                        style={{ marginBottom: "30px" }}
-                        onClick={this.handleSubmit}
-                      >
-                        Submit
-                      </button>
+                        <a className="btn-floating btn-large waves-effect waves-light red start-public"><i
+                            className="material-icons large" id={"menu"} onClick={this.handleSubmit}>public</i></a>
+                        <div className={"tap-target"} data-target="menu">
+                            <div className={"tap-target-content"}>
+                                <h5>Title</h5>
+                                <p>A bunch of text</p>
+                            </div>
+                        </div>
                     </div>
                   ) : (
                     <div></div>
