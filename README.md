@@ -30,3 +30,7 @@ NLTK
 ### Replacing
 
 <img src="https://i.stack.imgur.com/K53mD.png" />
+
+### Webapp scanning and creating template
+
+<img src="https://i.stack.imgur.com/gkCT5.png" />
