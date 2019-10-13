@@ -21,3 +21,12 @@ Pytesseract,
 Spacy,
 NLTK
 
+# Example
+
+### Detecting
+
+<img src="https://i.stack.imgur.com/FjZmd.png" />
+
+### Replacing
+
+<img src="https://i.stack.imgur.com/K53mD.png" />
