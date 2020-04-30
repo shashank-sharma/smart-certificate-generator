@@ -6,7 +6,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
     "google-maps-react": "^2.0.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "materialize-css": "^1.0.0-rc.2",
     "pdfjs": "^2.3.2",
     "react": "^16.4.0",
